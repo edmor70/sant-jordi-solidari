@@ -1,0 +1,6 @@
+CREATE TABLE public.reservation_notices (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), reservation_id uuid NOT NULL REFERENCES public.quote_requests(id) ON DELETE CASCADE, revision integer NOT NULL, kind text NOT NULL CHECK (kind IN ('updated','integration_error','document_error')), status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','sent','failed')), payload jsonb, prepared_at timestamptz, provider_id text, error text, created_at timestamptz NOT NULL DEFAULT now(), UNIQUE(reservation_id,revision,kind));
+GRANT SELECT ON public.reservation_notices TO authenticated;
+GRANT ALL ON public.reservation_notices TO service_role;
+ALTER TABLE public.reservation_notices ENABLE ROW LEVEL SECURITY;
+CREATE POLICY reservation_notice_manager_read ON public.reservation_notices FOR SELECT TO authenticated USING (public.has_billing_role(auth.uid()));
+COMMENT ON TABLE public.reservation_notices IS 'Durable internal-only revision and error notices; immutable payload reused within provider deduplication window.';

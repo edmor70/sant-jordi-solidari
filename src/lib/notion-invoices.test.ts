@@ -1,0 +1,7 @@
+import {it,expect} from 'vitest';
+import {invoiceNotionProperties,invoiceNotionDetail,type NotionInvoiceInput} from './notion-invoices';
+import {buildSummary} from './pricing';
+const d:NotionInvoiceInput={number:'M0012.1',reference:'PRUEBA',customer:{name:'PRUEBA',taxId:'TEST',email:'prueba@example.invalid'},plan:'split',stage:'advance',base:75,vat:7.5,total:82.5,paid:0,issuedDate:'2026-11-19',dueDate:'2026-11-24',state:'pendiente',summary:buildSummary({mode:'delivery',roses:50,shipping:[4]})};
+it('uses the real rich-text invoice number and title properties',()=>{expect(invoiceNotionProperties(d)['Número de factura'].rich_text[0]?.text.content).toBe('M0012.1');expect(invoiceNotionProperties(d,true)['Número de factura'].rich_text[0]?.text.content).toBe('PRUEBA-M0012.1');expect(invoiceNotionProperties(d,true).Factura.title[0]?.text.content).toContain('SIN VALIDEZ FISCAL');});
+it('retains the reservation relationship and all financial detail without schema changes',()=>{const detail=JSON.parse(invoiceNotionDetail(d));expect(detail.reserva).toBe('PRUEBA');expect(detail.transporte).toEqual([4]);expect(detail.pendiente).toBe(82.5);});
+it('does not expose any PDF URL when no private document link is supplied',()=>expect(invoiceNotionProperties(d)).not.toHaveProperty('PDF'));

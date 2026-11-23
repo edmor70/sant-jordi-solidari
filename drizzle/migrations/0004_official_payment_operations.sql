@@ -1,0 +1,56 @@
+CREATE TABLE public.payment_operation_counters (is_test boolean PRIMARY KEY, last_number integer NOT NULL DEFAULT 0 CHECK(last_number BETWEEN 0 AND 9999));
+GRANT ALL ON public.payment_operation_counters TO service_role;
+ALTER TABLE public.payment_operation_counters ENABLE ROW LEVEL SECURITY;
+CREATE TABLE public.payment_operations (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), reservation_id uuid REFERENCES public.quote_requests(id), order_id uuid REFERENCES public.billing_orders(id), operation_key text NOT NULL UNIQUE, is_test boolean NOT NULL DEFAULT true, sequence_number integer NOT NULL, plan text NOT NULL CHECK(plan IN ('single','split')), snapshot jsonb NOT NULL, created_at timestamptz NOT NULL DEFAULT now(), UNIQUE(is_test,sequence_number));
+GRANT SELECT ON public.payment_operations TO authenticated;
+GRANT ALL ON public.payment_operations TO service_role;
+ALTER TABLE public.payment_operations ENABLE ROW LEVEL SECURITY;
+CREATE POLICY payment_team_read ON public.payment_operations FOR SELECT TO authenticated USING(public.has_billing_role(auth.uid()));
+CREATE TRIGGER immutable_payment_operation BEFORE UPDATE OR DELETE ON public.payment_operations FOR EACH ROW EXECUTE FUNCTION public.billing_immutable();
+CREATE TABLE public.payment_documents (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), operation_id uuid NOT NULL REFERENCES public.payment_operations(id), stage text NOT NULL CHECK(stage IN ('single','advance','final')), number text NOT NULL UNIQUE, issued_date date NOT NULL DEFAULT (now() AT TIME ZONE 'Europe/Madrid')::date, due_date date NOT NULL, base numeric(12,2) NOT NULL, vat numeric(12,2) NOT NULL, total numeric(12,2) NOT NULL, paid numeric(12,2) NOT NULL DEFAULT 0, advance_document_id uuid REFERENCES public.payment_documents(id), UNIQUE(operation_id,stage));
+GRANT SELECT ON public.payment_documents TO authenticated;
+GRANT ALL ON public.payment_documents TO service_role;
+ALTER TABLE public.payment_documents ENABLE ROW LEVEL SECURITY;
+CREATE POLICY payment_team_read ON public.payment_documents FOR SELECT TO authenticated USING(public.has_billing_role(auth.uid()));
+CREATE TRIGGER immutable_payment_document BEFORE UPDATE OR DELETE ON public.payment_documents FOR EACH ROW EXECUTE FUNCTION public.billing_immutable();
+CREATE TABLE public.payment_document_dispatch (document_id uuid PRIMARY KEY REFERENCES public.payment_documents(id), pdf_path text, pdf_sha256 text, lease_token uuid, lease_until timestamptz, email_status text NOT NULL DEFAULT 'pending', email_error text, provider_id text, mail_payload jsonb, mail_prepared_at timestamptz, notion_status text NOT NULL DEFAULT 'pending', notion_error text, notion_page_id text);
+GRANT SELECT ON public.payment_document_dispatch TO authenticated;
+GRANT ALL ON public.payment_document_dispatch TO service_role;
+ALTER TABLE public.payment_document_dispatch ENABLE ROW LEVEL SECURITY;
+CREATE POLICY payment_team_read ON public.payment_document_dispatch FOR SELECT TO authenticated USING(public.has_billing_role(auth.uid()));
+CREATE FUNCTION public.payment_prepare(p_key text,p_reservation uuid,p_order uuid,p_test boolean,p_plan text,p_snapshot jsonb,p_stage text,p_actor uuid) RETURNS uuid LANGUAGE plpgsql SET search_path=public AS $$
+DECLARE o public.payment_operations; d public.payment_documents; a public.payment_documents; seq integer; b numeric; v numeric; total numeric; issued date:=(now() AT TIME ZONE 'Europe/Madrid')::date; due date; n integer:=0;
+BEGIN
+IF NOT public.has_billing_role(p_actor) THEN RAISE EXCEPTION 'forbidden'; END IF;
+IF NOT p_test THEN RAISE EXCEPTION 'production_invoicing_locked'; END IF;
+IF p_plan NOT IN ('single','split') OR (p_plan='single' AND p_stage<>'single') OR (p_plan='split' AND p_stage NOT IN ('advance','final')) THEN RAISE EXCEPTION 'invalid_payment_stage'; END IF;
+PERFORM pg_advisory_xact_lock(hashtextextended(p_key,0));
+SELECT * INTO o FROM public.payment_operations WHERE operation_key=p_key;
+IF FOUND THEN
+IF o.snapshot<>p_snapshot OR o.plan<>p_plan OR o.is_test<>p_test OR o.reservation_id IS DISTINCT FROM p_reservation OR o.order_id IS DISTINCT FROM p_order THEN RAISE EXCEPTION 'idempotency_conflict'; END IF;
+ELSE
+IF p_stage='final' THEN RAISE EXCEPTION 'advance_required'; END IF;
+IF p_reservation IS NULL AND p_order IS NULL THEN RAISE EXCEPTION 'operation_source_required'; END IF;
+b:=(p_snapshot->'summary'->'roses'->>'base')::numeric+COALESCE((p_snapshot->'summary'->'shippingTax'->>'base')::numeric,0);
+v:=(p_snapshot->'summary'->'roses'->>'vat')::numeric+COALESCE((p_snapshot->'summary'->'shippingTax'->>'vat')::numeric,0);
+total:=(p_snapshot->'summary'->>'grandTotal')::numeric;
+IF total IS NULL OR total<=0 OR round(b+v,2)<>total THEN RAISE EXCEPTION 'tax_or_shipping_pending'; END IF;
+INSERT INTO public.payment_operation_counters(is_test,last_number) VALUES(p_test,1) ON CONFLICT(is_test) DO UPDATE SET last_number=payment_operation_counters.last_number+1 RETURNING last_number INTO seq;
+INSERT INTO public.payment_operations(reservation_id,order_id,operation_key,is_test,sequence_number,plan,snapshot) VALUES(p_reservation,p_order,p_key,p_test,seq,p_plan,p_snapshot) RETURNING * INTO o;
+END IF;
+SELECT * INTO d FROM public.payment_documents WHERE operation_id=o.id AND stage=p_stage; IF FOUND THEN RETURN d.id; END IF;
+b:=(o.snapshot->'summary'->'roses'->>'base')::numeric+COALESCE((o.snapshot->'summary'->'shippingTax'->>'base')::numeric,0);
+v:=(o.snapshot->'summary'->'roses'->>'vat')::numeric+COALESCE((o.snapshot->'summary'->'shippingTax'->>'vat')::numeric,0); total:=b+v;
+IF p_stage='final' THEN SELECT * INTO a FROM public.payment_documents WHERE operation_id=o.id AND stage='advance'; IF NOT FOUND THEN RAISE EXCEPTION 'advance_required'; END IF;
+IF o.order_id IS NULL OR COALESCE((SELECT sum(amount) FROM public.billing_events WHERE order_id=o.order_id AND kind='advance'),0)<a.total THEN RAISE EXCEPTION 'advance_payment_unconfirmed'; END IF;
+b:=b-a.base; v:=v-a.vat; total:=total-a.total;
+ELSIF p_stage='advance' THEN b:=round(b*0.5,2); total:=round(total*0.5,2); v:=total-b; END IF;
+IF p_stage='final' THEN due:='2027-04-07'; ELSE due:=issued; WHILE n<3 LOOP due:=due+1; IF extract(isodow FROM due)<6 THEN n:=n+1; END IF; END LOOP; END IF;
+INSERT INTO public.payment_documents(operation_id,stage,number,due_date,base,vat,total,paid,advance_document_id) VALUES(o.id,p_stage,(CASE o.plan WHEN 'single' THEN 'U' ELSE 'M' END)||lpad(o.sequence_number::text,4,'0')||(CASE p_stage WHEN 'advance' THEN '.1' WHEN 'final' THEN '.2' ELSE '' END),due,b,v,total,CASE WHEN p_stage='final' THEN a.total ELSE 0 END,a.id) RETURNING * INTO d;
+INSERT INTO public.payment_document_dispatch(document_id) VALUES(d.id); INSERT INTO public.billing_audit(actor,action,entity_id) VALUES(p_actor,'prepare_official_test_document',d.id); RETURN d.id;
+END $$;
+REVOKE ALL ON FUNCTION public.payment_prepare(text,uuid,uuid,boolean,text,jsonb,text,uuid) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.payment_prepare(text,uuid,uuid,boolean,text,jsonb,text,uuid) TO service_role;
+CREATE FUNCTION public.payment_document_claim(p_id uuid) RETURNS public.payment_document_dispatch LANGUAGE plpgsql SET search_path=public AS $$ DECLARE d public.payment_document_dispatch; BEGIN UPDATE public.payment_document_dispatch SET lease_token=gen_random_uuid(),lease_until=now()+interval '3 minutes' WHERE document_id=p_id AND (lease_until IS NULL OR lease_until<now()) RETURNING * INTO d; RETURN d; END $$;
+REVOKE ALL ON FUNCTION public.payment_document_claim(uuid) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.payment_document_claim(uuid) TO service_role;

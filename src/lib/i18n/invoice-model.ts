@@ -1,0 +1,6 @@
+export const invoiceModelCopy = {
+ ibanPending: { es: 'Indeterminado', ca: 'Indeterminat' },
+ proformaTotal: 'TOTAL PROFORMA (€)',
+ es: { pickup:'Recogida', delivery:'Entrega', proforma:'PROFORMA', invalid:'DOCUMENTO DE PAGO · NO ES UNA FACTURA FISCAL', test:'PRUEBA · SIN VALIDEZ FISCAL', pending:'Pendiente de confirmar', rows:'Detalle adicional', bank:'Transferencia bancaria', paid:'Importe abonado', balance:'Pendiente de pago', missingTax:'Importe pendiente de validación; no realizar transferencia.', plan:'Documentos de pago', prepare:'Preparar y archivar documentos', download:'Descargar documento de pago', due:'Vencimiento', reference:'Referencia', status:'Archivo', error:'No se han podido preparar los documentos.' },
+ ca: { pickup:'Recollida', delivery:'Entrega', proforma:'PROFORMA', invalid:'DOCUMENT DE PAGAMENT · NO ÉS UNA FACTURA FISCAL', test:'PROVA · SENSE VALIDESA FISCAL', pending:'Pendent de confirmar', rows:'Detall addicional', bank:'Transferència bancària', paid:'Import abonat', balance:'Pendent de pagament', missingTax:'Import pendent de validació; no fer cap transferència.', plan:'Documents de pagament', prepare:'Prepara i arxiva els documents', download:'Descarrega el document de pagament', due:'Venciment', reference:'Referència', status:'Arxiu', error:'No s’han pogut preparar els documents.' },
+};

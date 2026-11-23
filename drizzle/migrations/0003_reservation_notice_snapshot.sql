@@ -1,0 +1,1 @@
+ALTER TABLE public.quote_requests ADD COLUMN internal_notice jsonb; COMMENT ON COLUMN public.quote_requests.internal_notice IS 'Immutable first internal email envelope reused for provider idempotency; never returned publicly';

@@ -1,0 +1,52 @@
+# Roadmap
+- [x] Revisión final del resultado: cinco cálculos y paso posterior en CA/ES móvil/escritorio (20 recorridos), tres PDF por idioma/tamaño descargados tras recarga (12 descargas), sin errores ni desbordamiento; acceso sin sesión y denegación tras revocar rol comprobados. Entrega de tres PDF TEST, sin nuevos correos.
+- [x] Anticipo simulado autorizado 19/11/2026 23:19 UTC: registrar 84,70 € solo en comanda ficticia; saldo M0004.2 archivado y descargado tras recarga, sin pago real.
+- [x] Verificación final disponible: cinco calculadoras móvil/escritorio con geocodificación real, reserva/panel persistente, cuatro reintentos sin duplicados, tres PDF archivados y descargados; 113 pruebas pasan. Una única prueba interna con PDF aceptada; permisos temporales retirados.
+- [x] Correo interno: Eduard confirma recepción en solidaristjordi@gmail.com y apertura del PDF a las 23:21 UTC; no reenviar.
+- [ ] Notion final: creación/actualización/recuperación de un registro técnico por base comprobadas desde chat; automatización Cloud y PDF Notion bloqueados mientras falte compartir/enlazar la conexión con el propietario; conservar destino fiscal sin documentos ficticios.
+- [x] Incorporar transporte 4/6 € por municipio antes de IVA, conservando 10 %; cálculo, panel y PDF comprobados; 108 pruebas automáticas y acceso revocado verificados.
+- [ ] Cierre integral: faltan recorridos reales fuera/múltiples/fraccionado y aviso de error en todos los generadores; Notion servidor bloqueado hasta compartir/enlazar conexión. Alcance de cada prueba en docs/RESERVAS-ESTADO.md.
+- [x] Explicar cómo compartir la conexión Notion: Ajustes del espacio, Conectores, Eduard's Notion, Sharing, propietario con Can use; pendiente acción del usuario.
+- [ ] Cerrar Notion: usar AMBAS bases existentes según último encargo. «Eduard's Notion» permite llamadas de chat (reserva ficticia creada, actualizada, recuperada una vez y archivada); servidor HTTP 401 Credential not found, falta compartir y enlazar. Mapeo de facturas preparado, PDF externo no verificado; requiere destino aislado de pruebas.
+- [x] Integrar los tres PDF oficiales con IBAN y contador compartido de pruebas U/M; pago único, anticipo y saldo archivados/descargados desde panel, reintentos concurrentes y revisión visual comprobados (90 pruebas). Sin clientes ni publicación; permiso temporal retirado.
+- [ ] Activar el circuito oficial en producción tras validación fiscal/SIF/IVA/transporte; los modelos nuevos siguen limitados a pruebas y proformas no fiscales.
+- [ ] Sincronización y envío de los nuevos documentos: transporte preparado, sin ejecutar; falta destino Notion separado de pruebas y autorización para probar el circuito externo completo.
+- [x] Configurar pedidos@santjordisolidari.es; activar avisos internos con PDF ya archivados, reintentos seguros y confirmaciones a compradores preparadas pero desactivadas; pruebas con proveedor simulado.
+- [x] Prueba real con PDF a eduard.moreira@alumni.esade.edu aceptada por Resend HTTP 200 con nueva clave válida y remitente pedidos@santjordisolidari.es.
+- [x] Recepción confirmada por Eduard a las 15:35 UTC; clave solo de envío no permite consultar entrega (401 restricted_api_key), pero no requiere cambio para enviar.
+- [x] Guardado concurrente, recuperación privada, estados, direcciones/franjas y Notion verificados con reservas controladas; sin correos a clientes.
+- [ ] Acceso permanente: el rol se asigna al registrarse con correo verificado solidaristjordi@gmail.com; falta su primer inicio de sesión. Cuenta temporal probada y permiso retirado.
+- [x] Circuito real reserva→aviso interno aceptado por Resend; modificación y fallo Notion aceptados y persistidos; recepción de estos avisos no verificada. Sin correos a compradores.
+- [x] Corregir domicilio a Passatge Maria Llimona e incorporar el IBAN suministrado en los tres modelos oficiales.
+- [x] Modelo PDF rellenable, mínimo 50 en cada campo de rosas y selector uno/dos pagos; documento inicial y saldo diferido, según instrucciones actualizadas.
+- [x] Archivo privado y descarga de U0001, M0002.1 y M0002.2 desde sesión autorizada; recarga recupera documentos y reintentos no consumen números.
+- [ ] Envío por etapas: transporte preparado con adjunto y destinatario fijo de pruebas; no se ha ejecutado para estos modelos. Compradores desactivados.
+- [x] Sustituir el favicon por la imagen específica suministrada después de los logos; comprobado en todas las páginas.
+- [x] Incorporar los dos logos originales suministrados y actualizar el favicon.
+- [x] Separación de reservas/pedidos/pagos/facturas, numeración transaccional TEST, PDF y panel privado implementados; cálculos y formulario comprobados.
+- [ ] Facturación fiscal completa pendiente de validación; circuito U/M probado exclusivamente con documentos ficticios.
+- [ ] Notion facturas: falta habilitar una base separada de pruebas y validar su esquema; reservas existentes accesibles.
+- [ ] Activación fiscal real: bloqueada hasta validar IVA/transporte, requisitos SIF y acceso permanente del equipo; remitente Resend ya aceptado.
+- [x] Cabecera del catálogo: título «Aquest Sant Jordi, regaleu roses…», precio 3,30 € IVA inclòs desde la configuración y botón «Calcula el pressupost» en CA/ES.
+- [x] Reserva con referencia propia y sin factura fiscal al guardar; avisos internos autorizados, compradores desactivados.
+- [x] Resend: nueva clave válida para enviar; remitente del dominio aceptado. Consulta de dominios restringida por permisos de solo envío.
+- [x] Notion: acceso y esquema real verificados en la base existente; creación y lectura posterior de PRUEBA-CONEXION-20261118 comprobadas sin cambiar estructura.
+- [x] Notion activado por solicitud expresa; avisos internos autorizados y activados, confirmaciones a compradores desactivadas.
+- [x] Incorporar foto del punto de libro suministrada (solo la fotografía, sin duplicar textos).
+- [x] Plantilla de factura ficticia ES/CA preparada; identidad tipográfica alternativa si los antiguos archivos no están disponibles.
+- [x] Confirmado: la donación sigue siendo el 12 % de los beneficios con la rosa a 3,00 € + IVA.
+- [x] Quitar los puntos de libro de la reserva (ya no los vendemos); el catálogo los mantiene y enlaza a la botiga de la Fundació.
+- [x] Bajar la rosa a 3,00 € + IVA (bruto estimado 3,30 €) y mantener la coherencia en CA/ES.
+- [x] Mover la carta a Certificados con vista previa clicable, apertura en pestaña nueva y descarga PDF en CA/ES.
+- [x] Unificar CA/ES: rosa 3,00 € + IVA, donación 12 % de beneficios; pago inicial a tres días hábiles y saldo el 07/04/2027 a las 23:59, según modelos actualizados.
+- [x] Centrar el menú y restaurar contenido íntegro CA/ES de impacto y tabla original.
+- [x] Integrar menú superior y desplegable de la web adjunta, con catálogo, colaboración, impacto, certificados y contacto; conservar CA/ES, tono rosa, presupuesto, precios/aportación y textos legales actuales. Contacto público y tres estudiantes de ESADE aprobados.
+- [x] Web corporativa CA/ES, páginas, formulario de presupuesto, cálculo de transporte, guardado privado
+- [x] Franjas de entrega obligatorias por destino (21 tarde, 22 mañana, 22 tarde) + portada fechas reparto vs Diada
+- [x] Campaña solo empresas: sin selector Empresa/Particular ni casilla de factura, razón social obligatoria, anticipo 50 % y condiciones de pago/cancelación
+- [x] Envío real de correo de prueba aceptado por Resend y recepción confirmada por Eduard.
+- [x] PDF personalizado CA/ES según modelo, guardado privado y enlace firmado de 7 días; destinatario fijo y Reply-To validado
+- [x] Prueba real autorizada con PDF aceptada; adjuntos privados conectados.
+- [ ] Desactivar contador de visitas — pendiente de tu aprobación
+- [ ] Subir los archivos restantes: carta-suport-fjc-2027.pdf, draft-unicode.ttf — pendiente del usuario
+- [ ] Volver a añadir SHIPPING_ORIGIN — pendiente del usuario; NOTION_API_KEY ya guardado y verificado.
