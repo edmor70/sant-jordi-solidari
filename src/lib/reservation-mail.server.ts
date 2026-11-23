@@ -11,7 +11,7 @@ type Reservation = Database['public']['Tables']['quote_requests']['Row'];
 export function pdfAttachments(bundle: unknown, reference: string) {
   const documents = z.array(z.object({ reference: z.string(), bytes: z.array(z.number().int().min(0).max(255)).min(5) })).min(1).max(2).parse(bundle);
   for (const d of documents) {
-    if (![reference, `${reference}.2`].includes(d.reference) || String.fromCharCode(...d.bytes.slice(0, 5)) !== '%PDF-') throw new Error('invalid_payment_bundle');
+    if ((![reference, `${reference}.2`].includes(d.reference) && !/^[UM]\d{4}(\.[12])?$/.test(d.reference)) || String.fromCharCode(...d.bytes.slice(0, 5)) !== '%PDF-') throw new Error('invalid_payment_bundle');
   }
   return documents.map(d => {
     let binary = '';

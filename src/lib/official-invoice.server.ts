@@ -15,9 +15,10 @@ export type OfficialDocumentInput = {
 export async function officialInvoicePdf(d: OfficialDocumentInput, origin: string) {
   if (!d.test && !d.proforma) throw new Error('production_invoicing_locked');
   const assetUrl = d.stage === 'single' ? singleUrl : d.stage === 'advance' ? advanceUrl : finalUrl;
-  const response = await fetch(new URL(assetUrl, origin));
-  if (!response.ok) throw new Error('invoice_template_missing');
-  const pdf = await PDFDocument.load(await response.arrayBuffer());
+  let tplBytes: ArrayBuffer | Uint8Array;
+  try { const { readFile } = await import('node:fs/promises'); const { join } = await import('node:path'); tplBytes = await readFile(join(process.cwd(), 'public', assetUrl.replace(/^\//, ''))); }
+  catch { const response = await fetch(new URL(assetUrl, origin)); if (!response.ok) throw new Error('invoice_template_missing'); tplBytes = await response.arrayBuffer(); }
+  const pdf = await PDFDocument.load(tplBytes);
   const form = pdf.getForm(), font = await pdf.embedFont(StandardFonts.Helvetica);
   const clean = (value: string) => Array.from(value.replace(/[\r\n\t]/g, ' '), c => { try { font.encodeText(c); return c; } catch { return '?'; } }).join('');
   const set = (key: string, value: string) => {

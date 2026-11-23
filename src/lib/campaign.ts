@@ -8,7 +8,7 @@ const bookmarkPhoto = "/punt-llibre-producte.jpg";
 const roseIllustrative = "/rosa-ilustrativa.jpg";
 
 export const CAMPAIGN = {
-  integrations: { reservationEmailsEnabled: true, buyerConfirmationsEnabled: true, notionAutomationEnabled: true },
+  integrations: { reservationEmailsEnabled: true, buyerConfirmationsEnabled: true, notionAutomationEnabled: false },
   year: 2027,
   donation: {
     perRose: 0.2,

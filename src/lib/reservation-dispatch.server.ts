@@ -24,7 +24,7 @@ export async function dispatchReservation(id:string){
      if(!snapshot){
       const {data:file,error:downloadError}=await db.storage.from('quote-drafts').download(`payment-documents/${row.id}/revision-${row.revision}/bundle.json`);
       if(downloadError && !/not found|not_found|does not exist/i.test(downloadError.message)) throw new MailError('pdf_download_failed');
-      const attachments=file?pdfAttachments(JSON.parse(await file.text()),row.reference):[];
+      let bundleData=file?JSON.parse(await file.text()):null;if(!bundleData){try{const {reservationDocuments}=await import('./reservation-documents.server');bundleData=await reservationDocuments(row,process.env['SITE_URL']||'https://www.santjordisolidari.es');}catch{}}const attachments=bundleData?pdfAttachments(bundleData,row.reference):[];
       snapshot={payload:prepareReservationMail(row,attachments),preparedAt:new Date().toISOString()};
       await save({internal_notice:JSON.parse(JSON.stringify(snapshot))});
      }
