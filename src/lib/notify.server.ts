@@ -81,7 +81,7 @@ async function resendSend(body: Record<string, unknown>, idempotencyKey: string)
   const key = process.env["RESEND_API_KEY"];
   const from = process.env["RESEND_FROM_EMAIL"];
   if (!lovable || !key || !from) return { sent: false, reason: "email_not_configured" };
-  const res = await fetch("https://connector-gateway.lovable.dev/resend/emails", {
+  const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${lovable}`, "X-Connection-Api-Key": key, "Idempotency-Key": idempotencyKey },
     body: JSON.stringify({ from, ...body }),

@@ -4,8 +4,8 @@ import { CAMPAIGN } from "./campaign";
 import { round2 } from "./pricing";
 import { draftCopy } from "./i18n/draft";
 import type { NoticeData } from "./notify.server";
-import logo from "@/assets/logo-colaboracio.png.asset.json";
-import unicode from "@/assets/draft-unicode.ttf.asset.json";
+import logoUrl from "@/assets/logo-colaboracio.png?url";
+import unicodeUrl from "@/assets/draft-unicode.ttf?url";
 
 export async function generateDraft(d: NoticeData, assets: { font: Uint8Array; logo: Uint8Array }) {
   const lang = d.lang === "es" ? "es" : "ca";
@@ -103,6 +103,6 @@ export async function loadDraftAssets(origin: string) {
     if (!response.ok) throw new Error("pdf_asset_failed");
     return new Uint8Array(await response.arrayBuffer());
   };
-  const [font, bytes] = await Promise.all([load(unicode.url), load(logo.url)]);
+  const [font, bytes] = await Promise.all([load(unicodeUrl), load(logoUrl)]);
   return { font, logo: bytes };
 }

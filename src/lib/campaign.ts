@@ -3,8 +3,8 @@
  * Change prices, VAT rates or the campaign date here only.
  * Values marked "validated: false" are shown to visitors as pending confirmation.
  */
-import letter from "@/assets/carta-suport.pdf.asset.json";
-import bookmarkPhoto from "@/assets/punt-llibre-producte.jpg.asset.json";
+import letter from "@/assets/carta-suport.pdf?url";
+import bookmarkPhoto from "@/assets/punt-llibre-producte.jpg?url";
 import roseIllustrative from "@/assets/rosa-ilustrativa.jpg";
 
 export const CAMPAIGN = {

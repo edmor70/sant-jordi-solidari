@@ -1,7 +1,7 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-import single from '@/assets/factura-pago_unico-iban.pdf.asset.json';
-import advance from '@/assets/factura-anticipo-iban.pdf.asset.json';
-import final from '@/assets/factura-final-iban.pdf.asset.json';
+import singleUrl from '@/assets/factura-pago_unico-iban.pdf?url';
+import advanceUrl from '@/assets/factura-anticipo-iban.pdf?url';
+import finalUrl from '@/assets/factura-final-iban.pdf?url';
 import { CAMPAIGN } from './campaign';
 import { invoiceModelCopy } from './i18n/invoice-model';
 import type { Summary } from './pricing';
@@ -14,8 +14,8 @@ export type OfficialDocumentInput = {
 };
 export async function officialInvoicePdf(d: OfficialDocumentInput, origin: string) {
   if (!d.test && !d.proforma) throw new Error('production_invoicing_locked');
-  const asset = d.stage === 'single' ? single : d.stage === 'advance' ? advance : final;
-  const response = await fetch(new URL(asset.url, origin));
+  const assetUrl = d.stage === 'single' ? singleUrl : d.stage === 'advance' ? advanceUrl : finalUrl;
+  const response = await fetch(new URL(assetUrl, origin));
   if (!response.ok) throw new Error('invoice_template_missing');
   const pdf = await PDFDocument.load(await response.arrayBuffer());
   const form = pdf.getForm(), font = await pdf.embedFont(StandardFonts.Helvetica);

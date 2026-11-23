@@ -1,5 +1,5 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-import template from '@/assets/factura-modelo.pdf.asset.json';
+import templateUrl from '@/assets/factura-modelo.pdf?url';
 import { CAMPAIGN } from './campaign';
 import { invoiceModelCopy } from './i18n/invoice-model';
 export type ModelData = {
@@ -10,7 +10,7 @@ export type ModelData = {
 };
 export async function fillInvoiceModel(d:ModelData,origin:string,lang:'es'|'ca'='es') {
  const t=invoiceModelCopy[lang];
- const response=await fetch(new URL(template.url,origin)); if(!response.ok)throw new Error('invoice_template_missing');
+ const response=await fetch(new URL(templateUrl,origin)); if(!response.ok)throw new Error('invoice_template_missing');
  const pdf=await PDFDocument.load(await response.arrayBuffer());const form=pdf.getForm();const font=await pdf.embedFont(StandardFonts.Helvetica);
  const clean=(text:string)=>Array.from(text.replace(/[\r\n\t]/g,' '),c=>{try{font.encodeText(c);return c;}catch{return '?';}}).join('');
  const set=(key:string,value:string)=>{const field=form.getTextField(key);const text=clean(value);field.setText(text);const widget=field.acroField.getWidgets()[0];const width=widget?.getRectangle().width??100;field.setFontSize(Math.max(5,Math.min(8,8*(width-5)/Math.max(1,font.widthOfTextAtSize(text,8)))));};
