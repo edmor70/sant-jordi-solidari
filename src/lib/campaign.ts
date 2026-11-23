@@ -25,7 +25,7 @@ export const CAMPAIGN = {
     // Sold directly by the Fundació Josep Carreras in its own shop: we neither sell nor invoice it.
     shopUrl: "https://tiendafcarreras.org/es/inicio/207-pack-celebracion-marcapaginas",
     // Product photo from the Fundació Josep Carreras shop (design ceded by Mr. Wonderful).
-    photo: bookmarkPhoto.url,
+    photo: bookmarkPhoto,
   },
   shipping: {
     barcelonaFlat: 4.0, // € per destination inside the municipality of Barcelona
@@ -51,7 +51,7 @@ export const CAMPAIGN = {
   supplierUrl: "https://www.rosessantjordi.com/",
   foundationUrl: "https://fcarreras.org/",
   // Replace with the copy authorised for public distribution before publishing.
-  supportLetter: { url: letter.url, dateISO: "2026-11-12", publicCopyAuthorized: false },
+  supportLetter: { url: letter, dateISO: "2026-11-12", publicCopyAuthorized: false },
   // Replace with the authorised photo of the prepared rose and set authorized: true.
   roseImage: { src: roseIllustrative, authorized: false },
   publicContact: { email: "solidaristjordi@gmail.com", phone: "+34 665 820 657", phoneHref: "+34665820657" },
