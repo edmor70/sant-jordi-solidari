@@ -1,7 +1,7 @@
 import { CAMPAIGN } from "@/lib/campaign";
 import { Link } from "@tanstack/react-router";
 import { Menu, ChevronDown } from "lucide-react";
-import logo from "@/assets/logo-rosa.png.asset.json";
+import logo from "@/assets/logo-rosa.png?url";
 import { useI18n, formatEUR, type Lang } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
@@ -18,7 +18,7 @@ export function Header() {
  return <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
   <a href="#contingut" className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:bg-paper focus:px-3 focus:py-2">{t.skip}</a>
   <div className="container-page flex min-h-16 flex-wrap items-center gap-x-3 gap-y-2 py-3">
-   <Link to="/" className="flex min-w-0 items-center gap-2"><img src={logo.url} alt="" width={48} height={48} className="h-12 w-12 shrink-0 object-contain" /><span className="max-w-48 font-display text-xl leading-tight sm:max-w-none sm:text-2xl">{c.projectName}</span></Link>
+   <Link to="/" className="flex min-w-0 items-center gap-2"><img src={logo} alt="" width={48} height={48} className="h-12 w-12 shrink-0 object-contain" /><span className="max-w-48 font-display text-xl leading-tight sm:max-w-none sm:text-2xl">{c.projectName}</span></Link>
    <div className="ml-auto flex items-center gap-2"><LangSwitch /><Button asChild className="min-h-10 shadow-none"><Link to="/pressupost"><span className="hidden md:inline">{t.cta.quote}</span><span className="md:hidden">{t.cta.quoteShort}</span></Link></Button></div>
   </div>
   <div className="border-t border-border"><nav aria-label={c.principal} className="container-page flex min-h-11 items-center justify-center gap-5 py-1">

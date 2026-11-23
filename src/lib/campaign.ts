@@ -8,7 +8,7 @@ import bookmarkPhoto from "@/assets/punt-llibre-producte.jpg?url";
 import roseIllustrative from "@/assets/rosa-ilustrativa.jpg";
 
 export const CAMPAIGN = {
-  integrations: { reservationEmailsEnabled: true, buyerConfirmationsEnabled: false, notionAutomationEnabled: true },
+  integrations: { reservationEmailsEnabled: true, buyerConfirmationsEnabled: true, notionAutomationEnabled: true },
   year: 2027,
   donation: {
     perRose: 0.2,

@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useI18n, formatEUR } from "@/lib/i18n";
 import { roseLine } from "@/lib/pricing";
-import colab from "@/assets/logo-colaboracio.png.asset.json";
+import colab from "@/assets/logo-colaboracio.png?url";
 
 /** First block of the rose catalog: title, explanation, highlighted price and the quote CTA. */
 export function CatalogHero() {
@@ -44,7 +44,7 @@ export function ColabLogo({ className = "" }: { className?: string }) {
   const { t } = useI18n();
   return (
     <div className={`rounded-lg bg-paper p-6 md:p-10 ${className}`}>
-      <img src={colab.url} alt={t.foundation.logoAlt} width={1761} height={661} loading="lazy" className="mx-auto h-auto w-full max-w-xl" />
+      <img src={colab} alt={t.foundation.logoAlt} width={1761} height={661} loading="lazy" className="mx-auto h-auto w-full max-w-xl" />
     </div>
   );
 }
