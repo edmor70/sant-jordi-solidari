@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useI18n, formatEUR } from "@/lib/i18n";
 import { roseLine } from "@/lib/pricing";
-import colab from "@/assets/logo-colaboracio.png?url";
+const colab = "/logo-colaboracio.png";
 
 /** First block of the rose catalog: title, explanation, highlighted price and the quote CTA. */
 export function CatalogHero() {

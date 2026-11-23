@@ -3,7 +3,7 @@ import { ArrowLeft, Download } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { seoHead, usePageSeo } from "@/lib/i18n/seo";
 import { CAMPAIGN } from "@/lib/campaign";
-import letterPage from "@/assets/carta-suport-page-1.jpg";
+const letterPage = "/carta-suport-page-1.jpg";
 
 export const Route = createFileRoute("/carta-de-suport")({ head: () => seoHead("letter"), component: SupportLetter });
 

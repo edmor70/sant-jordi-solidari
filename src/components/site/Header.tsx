@@ -1,7 +1,7 @@
 import { CAMPAIGN } from "@/lib/campaign";
 import { Link } from "@tanstack/react-router";
 import { Menu, ChevronDown } from "lucide-react";
-import logo from "@/assets/logo-rosa.png?url";
+const logo = "/logo-rosa.png";
 import { useI18n, formatEUR, type Lang } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";

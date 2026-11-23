@@ -4,8 +4,8 @@ import { CAMPAIGN } from "./campaign";
 import { round2 } from "./pricing";
 import { draftCopy } from "./i18n/draft";
 import type { NoticeData } from "./notify.server";
-import logoUrl from "@/assets/logo-colaboracio.png?url";
-import unicodeUrl from "@/assets/draft-unicode.ttf?url";
+const logoUrl = "/logo-colaboracio.png";
+const unicodeUrl = "/draft-unicode.ttf";
 
 export async function generateDraft(d: NoticeData, assets: { font: Uint8Array; logo: Uint8Array }) {
   const lang = d.lang === "es" ? "es" : "ca";

@@ -1,5 +1,5 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-import templateUrl from '@/assets/factura-modelo.pdf?url';
+const templateUrl = "/factura-modelo.pdf";
 import { CAMPAIGN } from './campaign';
 import { invoiceModelCopy } from './i18n/invoice-model';
 export type ModelData = {

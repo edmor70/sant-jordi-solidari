@@ -1,7 +1,7 @@
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-import singleUrl from '@/assets/factura-pago_unico-iban.pdf?url';
-import advanceUrl from '@/assets/factura-anticipo-iban.pdf?url';
-import finalUrl from '@/assets/factura-final-iban.pdf?url';
+const singleUrl = "/factura-pago_unico-iban.pdf";
+const advanceUrl = "/factura-anticipo-iban.pdf";
+const finalUrl = "/factura-final-iban.pdf";
 import { CAMPAIGN } from './campaign';
 import { invoiceModelCopy } from './i18n/invoice-model';
 import type { Summary } from './pricing';

@@ -31,6 +31,7 @@ export async function dispatchReservation(id:string){
      if(snapshot.payload.to.length!==1||snapshot.payload.to[0]!==INTERNAL_RECIPIENT)throw new MailError('recipient_not_authorized');
      const providerId=await sendResend(snapshot.payload,`internal-quote-${row.reference}`);
      if(CAMPAIGN.integrations.buyerConfirmationsEnabled){try{await sendResend(prepareReservationMail(row,snapshot.payload.attachments??[],true),`buyer-quote-${row.reference}`);}catch(be){console.error("buyer email failed",be instanceof MailError?be.code:"buyer_email_failed");}}
+     if(CAMPAIGN.integrations.buyerConfirmationsEnabled){try{await sendResend(prepareReservationMail(row,snapshot.payload.attachments??[],true),`buyer-quote-${row.reference}`);}catch(be){console.error("buyer email failed",be instanceof MailError?be.code:"buyer_email_failed");}}
      await save({email_status:'sent',email_error:null,email_provider_id:providerId});
     }catch(e){await save({email_status:'failed',email_error:e instanceof MailError?e.code:'email_preparation_failed'});}
    }

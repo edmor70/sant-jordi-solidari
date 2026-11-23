@@ -4,7 +4,7 @@ import { seoHead, usePageSeo } from "@/lib/i18n/seo";
 import { PageHero } from "@/components/site/Bits";
 import { Download } from "lucide-react";
 import { CAMPAIGN } from "@/lib/campaign";
-import letterPage from "@/assets/carta-suport-page-1.jpg";
+const letterPage = "/carta-suport-page-1.jpg";
 export const Route = createFileRoute("/certificats")({ head: () => seoHead("certificates"), component: Certificates });
 function Certificates() {
   usePageSeo("certificates");
